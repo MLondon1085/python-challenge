@@ -3,54 +3,47 @@ import csv
 
 PyBank_csv_path = os.path.join('..', 'PyBank', 'budget_data.csv')
 
-# with open(PyBank_csv_path, 'r') as text:
-#     print(text)
-#     lines = text.read()
-#     print(lines)
+all_months = []
+pl = []
 
-with open(PyBank_csv_path, newline='') as csvfile:
+with open(PyBank_csv_path, "r") as csvfile:
+
     csvreader = csv.reader(csvfile, delimiter=',')
-    csv_header = next(csvreader, none)
-
-    # total_months=0
-    # total_revenue=0
-    # revenue_change=[]
-    # prev_revenue=0
-    
-    # for row in csvreader:
-    #     total_months=total_months+1
-    #     total_revenue=total_revenue+int(row[1])    
-    #     monthly_diff=int(row[1])-prev_revenue
-    #     revenue_change.append(monthly_diff)
-    #     prev_revenue=int(row[1])
+    next(csvreader)
 
     for row in csvreader:
-       all_months.append(row[0])
-       pl.append(row[1])
+        all_months.append(row[0])
+        pl.append(int(row[1]))
 
-#count total no of months
-total_month = len(all_months)
+ #count total no of months
+        total_month = len(all_months)
+        print(total_month)
 
-#total net profit and loss
-net_pl = sum(pl)
+ #total net profit and loss
+        net_pl = sum(pl)
+        print(net_pl)
 
-#avg revenue
-avg_rev = round(net_pl/total_month, 2)
-
-   #max increase and decrease
-
-max_profit=pl[0]
-min_profit=pl[0]
-
-for x in range(len(pl)):
-    if pl[x]> max_profit:
-        max_profit=pl[x]
-        max_profit_month=all_month[x]
+    #max increase and decrease
+        revenue_change=[]
         
-    elif pl[x]<min_profit:
-        min_profit=pl[x]
-        min_profit_month=all_month[x]
+for x in range (len(pl)-1):
 
+         revenue_change.append(pl[x+1] - pl[x])
+
+#Avg revenue
+avg_rev=round(sum(revenue_change)/len(revenue_change),2)
+
+max_profit = revenue_change[0]
+min_profit = revenue_change[0]
+
+for x in range(len(revenue_change)):
+     if revenue_change[x]> max_profit:
+        max_profit=revenue_change[x]
+        max_profit_month=all_months[x+1]
+
+     elif revenue_change[x]<min_profit:
+         min_profit=revenue_change[x]
+         min_profit_month=all_months[x+1]
 
 print ("Financial Analysis")
 print("----------------------------------")
@@ -61,4 +54,12 @@ print ("Maximum Profit:" + str(max_profit)+" " + "Month:" + " " +str(max_profit_
 print ("Minimum Profit:" + str(min_profit) + " " +"Month:"+" "+ str(min_profit_month))
 
 
-for x in range():
+output_path = os.path.join("budget.txt")
+with open(output_path, 'w') as txt:
+    txt.writelines('Financial Analysis\n')
+    txt.writelines('----------------------------' + '\n')
+    txt.writelines("Total No of Months:" + str(total_month) + '\n')
+    txt.writelines("Net Profit and Loss:" + str(net_pl) + '\n')
+    txt.writelines("Average Change in P/L:" + str(avg_rev) + '\n')
+    txt.writelines("Maximum Profit:" + str(max_profit)+" " + "Month:" + " " +str(max_profit_month)+ '\n')
+    txt.writelines("Minimum Profit:" + str(min_profit) + " " +"Month:"+" "+ str(min_profit_month))
